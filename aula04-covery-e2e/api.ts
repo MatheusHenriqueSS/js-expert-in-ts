@@ -1,10 +1,28 @@
 import * as http from "http";
 
+const DEFAULT_USER = {username: "eulerdeoja", password: "0708"};
+
 const routes = {
 
     '/contact:get': (request, response) => {
         response.write('contact us page');
         return response.end();
+    },
+
+    '/login:post': async (request, response) => {
+        for await (const data of request) {
+            const user = JSON.parse(data);
+            if(user.username !== DEFAULT_USER.username || user.password !== DEFAULT_USER.password) {
+                    response.writeHead(401);
+                    response.write("Logging failed!");
+                    return response.end();
+            }
+
+            response.writeHead(200);
+            response.write("Logging has succeeded!");
+            return response.end();
+
+        }
     },
 
     default: (request, response) => {
