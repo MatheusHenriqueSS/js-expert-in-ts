@@ -1,0 +1,23 @@
+[
+	{
+		"id": "7b1ffe6f-6692-4eed-9d2a-11fd0046e7ad",
+		"name": "Model Y",
+		"releaseYear": 2022,
+		"available": true,
+		"gasAvailable": true
+	},
+	{
+		"id": "49bee2f5-d2bc-4ae5-9f28-5aa804f215af",
+		"name": "XTS",
+		"releaseYear": 2022,
+		"available": true,
+		"gasAvailable": true
+	},
+	{
+		"id": "fe68ef32-47e3-43d2-9371-21a292e5ac61",
+		"name": "V90",
+		"releaseYear": 2022,
+		"available": true,
+		"gasAvailable": true
+	}
+]
