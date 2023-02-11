@@ -3,6 +3,7 @@ import { Car } from "../entitites/car";
 import { CarCategory } from "../entitites/carCategory";
 import { Customer } from "../entitites/customer";
 import { Tax } from "../entitites/tax";
+import { Transaction } from "../entitites/transaction";
 import { BaseRepository } from "../repository/base/baseRepository";
 
 export class CarService {
@@ -44,7 +45,18 @@ export class CarService {
         
 
         return this.currencyFormat.format((tax * price) * numberOfDays);
-    }   
+    }
+    
+    
+    async rent(carCategory: CarCategory, customer: Customer, numberOfDays: number) {
+        const finalPrice = this.calculateFinalPrice(carCategory, customer, numberOfDays);
+        const rentedCar = await this.getAvailableCar(carCategory);
+        const curDate = new Date();
+        curDate.setDate(curDate.getDate() + numberOfDays);
+        const dueDate = curDate.toLocaleDateString("pt-br", {year: "numeric", month: "long", day: "numeric"});
+
+        return new Transaction({customer, car: rentedCar, price: finalPrice, dueDate});
+    }
 
 
 
