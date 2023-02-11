@@ -6,6 +6,7 @@ import validCar from "../mocks/valid-car";
 import validCustomer from "../mocks/valid-customer";
 import {expect} from "chai";
 import * as sinon from "sinon";
+import { Transaction } from "../../src/entitites/transaction";
 const carsDatabase = join(__dirname, "./../../database", "cars.json");
 
 const mocks = {
@@ -82,6 +83,36 @@ describe('CarService Suite Tests', () => {
 
         const result = carService.calculateFinalPrice(carCategory, customer, numberOfDays);
 
+        expect(result).to.be.deep.equal(expected);
+
+    })
+    it('given a customer and a car cateogory it should return a transaction receipt', async () => {
+        const customer = Object.create(mocks.validCustomer);
+        customer.age = 50;
+
+        const car = mocks.validCar;
+
+        const numberOfDays = 5;
+
+        const carCategory = Object.create({
+            ...mocks.validCarCategory,
+            price: 37.6,
+            carIds: [car.id]
+        })
+
+        const finalPrice = carService.currencyFormat.format(244.4);
+
+        const dueDate = "10 de novembro de 2020";
+
+        const curDate = new Date(2020, 10, 5);
+
+        sandbox.useFakeTimers(curDate);
+
+        sandbox.stub(carService, "taxes").get(() => [{from : 40, to: 60, then: 1.3}]);
+        sandbox.stub(carService.carRepository, "find").resolves(car);
+
+        const expected = new Transaction({customer, car, price: finalPrice, dueDate});
+        const result = await carService.rent(carCategory, customer, numberOfDays);
         expect(result).to.be.deep.equal(expected);
 
     })
